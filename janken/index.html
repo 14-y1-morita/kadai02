@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- リセットcss読み込み -->
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- style.css読み込み -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- jquery読み込み -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <title>ジャンケンゲーム</title>
+</head>
+<body>
+    <!-- タイトルエリア -->
+    <div class="main">
+        <h1 class="title">ジャンケンゲーム</h1>
+    </div>
+
+    <!-- 結果表示エリア -->
+    <div class="result">
+       <h2 class="text"> 
+       <p class="result-img"></p>
+       <div class="result-text"></div>
+       <p class="result-img2"></p>
+    </div>
+
+    <!-- 入力エリア -->
+    <div class="my-hand">
+        <ul class="hand-list">
+            <li id="gu" class="hand" value="1"><p><img class="hand-img" src="images/gu.png" alt=""></p></li>
+            <li id="choki" class="hand" value="2"><p><img class="hand-img" src="images/choki.png" alt=""></p></li>
+            <li id="pa" class="hand" value="3"><p><img class="hand-img" src="images/pa.png" alt=""></p></li>
+        </ul>
+    </div>
+
+<!-- ここからjs -->
+<script>
+    // 変数覚書
+    //   input_data : ユーザーが選択した値を入れる
+    //   rival_data : 相手の入力した値を入れる。(CPUなのでランダム) 
+    //   judge_data : 勝ち負け判定に使用する。
+
+    // ボタン押下時の処理を書いていく
+    // ”.hand"[クラス名:hand] の Click 時の処理を書いていく 
+    $(".hand").on("click",function(){
+
+        // まずは押されたボタンが何かを取得
+        // $(this)[イベントが発生した要素] の val() を変数 input_data に格納        
+        let input_data =$(this).val();
+
+        // 動作確認用：この行は実際には不要だが $(this) の確認に
+        console.log(input_data);
+        // コンソール開いて動作確認するとわかるが、以下のようになっていることがわかる
+        //    1 : グー
+        //    2 : チョキ
+        //    3 : パー
+
+
+        // 相手(今回はCPUなので)ランダム値を生成
+        // randomで0~0.9999..の乱数発生させて×3倍。1をグーにしたいので+1させて補正
+        let rival_data = Math.floor(Math.random()*3)+1;
+        // 一応動作確認：1〜3の値しか出力されないことを確認用
+        console.log(rival_data);
+
+        // 勝敗判定
+        let judge_data = input_data - rival_data;
+        console.log(judge_data);
+
+        // あいこのときは judge_data = 0
+        // ユーザーが勝ちの時は グー(1)vsチョキ(2)=-1, チョキ(2)vsパー(3)=-1, パー(3)vsグー(1)=2
+        // CPUが勝ちの時は グー(1)vsパー(3)=-2, チョキ(2)vsvsグー(1)=1, パー(3)vsチョキ(2)=1
+
+        // 上記を元に勝敗判定
+        if ( judge_data == 0) {    
+            $('.result-text').html('おあいこです');
+        } else if(judge_data==-1 || judge_data==2){ 
+            $('.result-text').html('あなたの勝ちです');
+        } else {
+            $('.result-text').html('あなたの負けです');
+        }
+
+        // アイコン埋める処理
+        // 相手が出した手を表示
+        if(rival_data == 1){
+            $('.result-img').html('<img src="images/gu.png" alt="">');
+        }else if(rival_data == 2){
+            $('.result-img').html('<img src="images/choki.png" alt="">');
+        }else if(rival_data == 3){
+            $('.result-img').html('<img src="images/pa.png" alt="">');
+        }
+
+        // 自分が出した手も表示して、勝ち負けわかりやすく表示
+        if(input_data == 1){
+            $('.result-img2').html('<img src="images/gu.png" alt="">');
+        }else if(input_data == 2){
+            $('.result-img2').html('<img src="images/choki.png" alt="">');
+        }else if(input_data == 3){
+            $('.result-img2').html('<img src="images/pa.png" alt="">');
+        }
+    });
+    
+
+</script>
+</body>
+</html>
